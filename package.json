@@ -1,0 +1,22 @@
+{
+  "name": "plutobot",
+  "version": "1.0.0",
+  "description": "Pluto Bot, the open source discord bot!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoBot/Pluto.git"
+  },
+  "author": "TeamPluto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PlutoBot/Pluto/issues"
+  },
+  "homepage": "https://github.com/PlutoBot/Pluto#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}
