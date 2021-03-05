@@ -4,6 +4,20 @@ const fs = require('fs');
 
 const token = require(`../token.json`);
 
+// Command handler
+client.commands = new Discord.Collection();
+
+fs.readdir("./commands/", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    if (!file.endsWith(".js")) return;
+    let props = require(`./commands/${file}`);
+    let commandName = file.split(".")[0];
+    console.log(`Attempting to load command ${commandName}`);
+    client.commands.set(commandName, props);
+  });
+});
+
 client.on('ready', async () =>
 {
     console.info("Bot Enabled");
