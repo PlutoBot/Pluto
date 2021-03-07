@@ -1,3 +1,8 @@
-exports.run = (client, message, args) => {
-    message.channel.send(":ping_pong: Pong!").catch(console.error);
-}
+exports.run = (client, message, args) =>
+ {
+
+    client.messageutil.sendEmbed(message.channel, ":ping_pong: pong!").catch(err => {
+        if(err) console.error(err);
+    });
+
+};

@@ -2,28 +2,35 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
 const messageutil = require('./messageutil');
+const logsChannel = client.channels.cache.find(c => c.name === "logs");
 
+client.logs = logsChannel;
 client.messageutil = messageutil;
 client.config = require("./config.json");
 
 const token = require(`../token.json`);
 
+let commands = 0;
+let events = 0;
+
 // Command handler
 client.commands = new Discord.Collection();
-
-fs.readdir("./commands/", (err, files) => {
+fs.readdir("./commands/", (err, files) => 
+{
   if (err) return console.error(err);
+  if(err) events = events - 1;
   files.forEach(file => {
     if (!file.endsWith(".js")) return;
     let props = require(`./commands/${file}`);
     let commandName = file.split(".")[0];
-    console.log(`Attempting to load command ${commandName}`);
+    commands = commands + 1;
     client.commands.set(commandName, props);
   });
 });
 
 // Event handler
-fs.readdir("./events/", (err, files) => {
+fs.readdir("./events/", (err, files) =>
+{
     if (err) return console.error(err);
     files.forEach(file => {
       // If the file is not a JS file, ignore it (thanks, Apple)
@@ -37,23 +44,35 @@ fs.readdir("./events/", (err, files) => {
       // followed by its "normal" arguments, like message, member, etc etc.
       // This line is awesome by the way. Just sayin'.
       client.on(eventName, event.bind(null, client));
+      if(err) events = events - 1;
+      events = events + 1;
       delete require.cache[require.resolve(`./events/${file}`)];
     });
-  });
+});
 
 client.on('ready', async () =>
 {
-    console.info("Bot Enabled");
-    console.log("Members: " + client.users.cache.size);
-    console.log("Guilds: " + client.guilds.cache.size);
-    console.log("Channels: " + client.channels.cache.size);
+    console.log("[-------------------------------------------]");
+    console.log(" Welcome to Pluto. Loading the bot.");
+    console.log("[-------------------------------------------]");
+
+    console.log(" ");
+    console.log(" ");
+    console.log("[-------------------------------------------]");
+    console.log(" Commands Loaded: " + commands); 
+    console.log(" Listeners Loaded: " + events)
+    console.log("[-------------------------------------------]");
+    console.log(" Bot Enabled")
+    console.log("[-------------------------------------------]");
+
+    let channel = client.channels.cache.find(c => c.name === "general");
+
+    channel.send(":white_check_mark: Successfully started PlutoBot.");
+    channel.send("Check #startup-details for startup details IF YOU HAVE THAT CHANNEL.");
+
+    let startup = client.channels.cache.find(c => c.name === "startup-details");
 
     client.user.setActivity("version: BETA")
-});
-
-client.on('message', async (message) =>
-{
-
 });
 
 client.login(token.TOKEN);

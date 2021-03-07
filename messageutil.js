@@ -12,15 +12,17 @@
 const { MessageEmbed } = require("discord.js");
 const config = require(`./config.json`);
 
-module.exports = {
+module.exports = 
+{
     sendEmbed: sendEmbed,
     message: message,
     sendError: sendError,
     editEmbed: editEmbed
-}
+};
 
 
-function sendEmbed(channel,title,description,color,footer,fields,thumbnail,iconURL){
+function sendEmbed(channel,title,description,color,footer,fields,thumbnail,iconURL)
+{
     let Embed = new MessageEmbed()
     .setTitle(title || "")
     .setDescription(description || "")
@@ -31,27 +33,43 @@ function sendEmbed(channel,title,description,color,footer,fields,thumbnail,iconU
     if(fields) Embed.addFields(fields);
 
     return channel.send(Embed)
-}
+};
 
 
-function message(channel,message){
+function message(channel,message)
+{
 
     return channel.send(message);
-}
+};
 
-function sendError(channel,message){
+function sendError(channel,message)
+{
     return sendEmbed(
         channel,
         "ERROR",
         message,
-        config.embed.colors.error,
+        config.co,
         "If you feel like this is an error, please message Ivan.#2005",
         "",
         "",
         "",
     )
-}
+};
 
-function editEmbed(message,title,desc,color,footer){
+function sendNoPermission(channel, permission)
+{
+    return sendEmbed(
+        channel,
+        ":x: Error performing that action!",
+        "You are missing the required permission of " + permission,
+        config.color,
+        "",
+        "",
+        "",
+    );
+};
+
+function editEmbed(message,title,desc,color,footer)
+{
     return message.edit(new MessageEmbed().setTitle(title||"").setDescription(desc||"").setColor(color||config.embed.colors.main).setFooter(footer||config.embed.footer));
-}
+};
